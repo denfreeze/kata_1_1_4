@@ -1,12 +1,12 @@
 package jm.task.core.jdbc.model;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Table
+@Entity
+@Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
@@ -22,8 +22,7 @@ public class User {
 
     }
 
-    public User(long id, String name, String lastName, Byte age) {
-        this.id = id;
+    public User(String name, String lastName, Byte age) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -33,7 +32,7 @@ public class User {
         return id;
     }
 
-    public void setId(Long id) {
+    private void setId(Long id) {
         this.id = id;
     }
 
@@ -58,7 +57,11 @@ public class User {
     }
 
     public void setAge(Byte age) {
-        this.age = age;
+        if (age != null && age >= 0) {
+            this.age = age;
+        } else {
+            throw new IllegalArgumentException("Age cannot be negative or null");
+        }
     }
 
     @Override
